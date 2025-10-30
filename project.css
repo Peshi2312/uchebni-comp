@@ -1,0 +1,109 @@
+:root {
+  --primary-color: #071034;
+  --accent-color: #ffffff;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 100%;
+  font-family: "Arial Rounded MT Bold", "Helvetica Rounded", Arial, "Nimbus Sans Rounded", sans-serif;
+  font-weight: 700;
+  overflow: hidden;
+  background: var(--primary-color);
+  position: relative;
+}
+
+.hero {
+  height: 100vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-color);
+  text-align: center;
+  background-image: url("Artboard 2.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  overflow: hidden;
+}
+
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.site-logo {
+  width: 120px;
+  height: auto;
+  display: block;
+}
+
+.header-nav {
+  display: flex;
+  gap: 30px;
+}
+
+.nav-link {
+  color: var(--accent-color);
+  text-decoration: none;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  transition: opacity 0.3s;
+  font-family: "Arial Rounded MT Bold", "Helvetica Rounded", Arial, sans-serif;
+  font-weight: 700;
+}
+
+.nav-link:hover {
+  opacity: 0.8;
+}
+
+.logo-title {
+  font-size: 5.5rem;
+  font-family: "Arial Rounded MT Bold", "Helvetica Rounded", Arial, sans-serif;
+  font-weight: 700;
+  letter-spacing: 8px;
+  margin: 0 0 2rem;
+  color: var(--accent-color);
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.start-btn {
+  margin-top: 2rem;
+  padding: 12px 40px;
+  background: transparent;
+  color: var(--accent-color);
+  text-decoration: none;
+  border: 2px solid var(--accent-color);
+  border-radius: 25px;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  font-family: "Arial Rounded MT Bold", "Helvetica Rounded", Arial, sans-serif;
+  font-weight: 700;
+}
+
+.start-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}

@@ -20,13 +20,34 @@
   <main class="hero">
     <div class="quiz-container">
       <h2 class="quiz-title">Select Your Quiz</h2>
-      <select class="quiz-select">
-        <option value="" disabled selected>Избери викторина</option>
-        <option value="option1">Английски</option>
-        <option value="option2">Литература</option>
-        <option value="option2">Математика</option>
-        <option value="option2">Биология</option>
-        <option value="option2">Физика</option>
+
+      <div class="select-row">
+        <div class="subject-group">
+          <label class="label">Избери предмет</label>
+          <div class="subjects" role="list">
+            <button type="button" class="subject-btn" data-value="Английски">Английски</button>
+            <button type="button" class="subject-btn" data-value="Литература">Литература</button>
+            <button type="button" class="subject-btn" data-value="Математика">Математика</button>
+            <button type="button" class="subject-btn" data-value="Биология">Биология</button>
+            <button type="button" class="subject-btn" data-value="Физика">Физика</button>
+          </div>
+        </div>
+
+        <div class="grade-group">
+          <label class="label">Клас</label>
+          <select class="grade-select" aria-label="Избери клас">
+            <option value="" disabled selected>Избери клас</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="margin-top:2rem;">
+        <button id="start-btn" class="start-btn" disabled>START</button>
       </select>
     </div>
   </main>

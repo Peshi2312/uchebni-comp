@@ -37,21 +37,27 @@
     gap: 1rem;
     cursor: pointer;
 }
-
 .subject-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
-    background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .subject-emoji {
-    font-size: 3rem;
-    display: block;
-    margin-bottom: 0.5rem;
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 0.5rem;
 }
 
 .subject-card h2 {
-    font-size: 1.5rem;
-    margin: 0;
-    font-weight: 700;
+  font-size: 1.5rem;
+  margin: 0;
+  font-weight: 700;
 }
+
+/* make all cards visually even height */
+.subject-card {
+  min-height: 220px;
+  justify-content: center;
+}
+ 

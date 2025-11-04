@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="bg">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>География - SoftQuiz</title>
+    <link rel="stylesheet" href="../project.css">
+    <link rel="stylesheet" href="quiz.css">
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <img class="site-logo" src="../b_50cfaf10b4a8d8ca72c0074ca7ced57e.png" alt="SoftUni logo">
+        </div>
+        <nav class="header-nav">
+            <a href="../project.html" class="nav-link">HOME</a>
+            <a href="../select.html" class="nav-link">ПРЕДМЕТИ</a>
+        </nav>
+    </header>
+    <main class="quiz-container">
+        <div class="quiz-progress">Въпрос <span id="currentQuestion">1</span> от <span id="totalQuestions">10</span>
+        </div>
+        <div class="quiz-box">
+            <div id="question" class="question">
+                <h2>Коя е столицата на България?</h2>
+            </div>
+            <div class="answers">
+                <button class="answer-btn" onclick="checkAnswer(this)" data-correct="true">София</button>
+                <button class="answer-btn" onclick="checkAnswer(this)">Варна</button>
+                <button class="answer-btn" onclick="checkAnswer(this)">Пловдив</button>
+                <button class="answer-btn" onclick="checkAnswer(this)">Бургас</button>
+            </div>
+            <button id="nextBtn" class="next-btn" onclick="nextQuestion()" disabled>Следващ въпрос</button>
+        </div>
+    </main>
+    <script>
+        const questions = [
+            {
+                question: "Коя е столицата на България?",
+                answers: ["София", "Варна", "Пловдив", "Бургас"],
+                correct: 0
+            },
+            {
+                question: "Кой е най-високият връх в България?",
+                answers: ["Вихрен", "Мусала", "Ботев", "Черни връх"],
+                correct: 1
+            },
+            {
+                question: "На кой континент се намира България?",
+                answers: ["Азия", "Африка", "Европа", "Америка"],
+                correct: 2
+            },
+            {
+                question: "С коя държава НЕ граничи България?",
+                answers: ["Гърция", "Румъния", "Унгария", "Турция"],
+                correct: 2
+            },
+            {
+                question: "Кое море мие бреговете на България?",
+                answers: ["Черно море", "Средиземно море", "Адриатическо море", "Егейско море"],
+                correct: 0
+            },
+            {
+                question: "Коя е най-дългата река в България?",
+                answers: ["Дунав", "Марица", "Искър", "Струма"],
+                correct: 0
+            },
+            {
+                question: "Кое е най-голямото езеро в България?",
+                answers: ["Варненско", "Бургаско", "Поморийско", "Сребърна"],
+                correct: 0
+            },
+            {
+                question: "В коя планина се намира връх Мусала?",
+                answers: ["Пирин", "Рила", "Стара планина", "Родопи"],
+                correct: 1
+            },
+            {
+                question: "Кой е най-големият град по население след София?",
+                answers: ["Варна", "Пловдив", "Бургас", "Русе"],
+                correct: 1
+            },
+            {
+                question: "През коя планина минава Шипченският проход?",
+                answers: ["Рила", "Пирин", "Родопи", "Стара планина"],
+                correct: 3
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function checkAnswer(button) {
+            const buttons = document.querySelectorAll('.answer-btn');
+            buttons.forEach(btn => {
+                btn.disabled = true;
+                if (btn.getAttribute('data-correct') === 'true') {
+                    btn.classList.add('correct');
+                }
+            });
+
+            const correct = button.getAttribute('data-correct') === 'true';
+            if (!correct) {
+                button.classList.add('wrong');
+            }
+
+            if (correct) {
+                score++;
+            }
+
+            document.getElementById('nextBtn').disabled = false;
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            const questionNum = document.getElementById('currentQuestion');
+            questionNum.textContent = currentQuestionIndex + 1;
+
+            if (currentQuestionIndex >= questions.length) {
+                showResult();
+                return;
+            }
+
+            const question = questions[currentQuestionIndex];
+            document.querySelector('.question h2').textContent = question.question;
+
+            const buttons = document.querySelectorAll('.answer-btn');
+            buttons.forEach((btn, index) => {
+                btn.textContent = question.answers[index];
+                btn.disabled = false;
+                btn.className = 'answer-btn';
+                btn.setAttribute('data-correct', index === question.correct);
+            });
+
+            document.getElementById('nextBtn').disabled = true;
+        }
+
+        function showResult() {
+            const quizBox = document.querySelector('.quiz-box');
+            quizBox.innerHTML = `
+                <div class="result">
+                    <h2>Резултат: ${score} от ${questions.length}</h2>
+                    <button class="restart-btn" onclick="location.reload()">Опитай пак</button>
+                    <a href="../select.html" class="back-btn">Избери друг предмет</a>
+                </div>
+            `;
+        }
+    </script>
+</body>
+
+</html>

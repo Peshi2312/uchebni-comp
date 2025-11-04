@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="bg">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Български език - SoftQuiz</title>
+    <link rel="stylesheet" href="../project.css">
+    <link rel="stylesheet" href="quiz.css">
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <img class="site-logo" src="../b_50cfaf10b4a8d8ca72c0074ca7ced57e.png" alt="SoftUni logo">
+        </div>
+        <nav class="header-nav">
+            <a href="../project.html" class="nav-link">HOME</a>
+            <a href="../select.html" class="nav-link">ПРЕДМЕТИ</a>
+        </nav>
+    </header>
+    <main class="quiz-container">
+        <div class="quiz-progress">Въпрос <span id="currentQuestion">1</span> от <span id="totalQuestions">10</span>
+        </div>
+        <div class="quiz-box">
+            <div id="question" class="question">
+                <h2>Коя от думите е съществително име?</h2>
+            </div>
+            <div class="answers">
+                <button class="answer-btn" onclick="checkAnswer(this)" data-correct="true">книга</button>
+                <button class="answer-btn" onclick="checkAnswer(this)">чета</button>
+                <button class="answer-btn" onclick="checkAnswer(this)">бърз</button>
+                <button class="answer-btn" onclick="checkAnswer(this)">красиво</button>
+            </div>
+            <button id="nextBtn" class="next-btn" onclick="nextQuestion()" disabled>Следващ въпрос</button>
+        </div>
+    </main>
+    <script>
+        const questions = [
+            {
+                question: "Коя от думите е съществително име?",
+                answers: ["книга", "чета", "бърз", "красиво"],
+                correct: 0
+            },
+            {
+                question: "В кое изречение има глагол?",
+                answers: ["Денят е слънчев.", "Той пише писмо.", "Красива градина.", "Синьо небе."],
+                correct: 1
+            },
+            {
+                question: "Коя дума е синоним на 'храбър'?",
+                answers: ["страхлив", "смел", "тъжен", "весел"],
+                correct: 1
+            },
+            {
+                question: "Какъв е правилният правопис?",
+                answers: ["връстник", "връздух", "вързел", "връзка"],
+                correct: 3
+            },
+            {
+                question: "Кое изречение е възклицателно?",
+                answers: ["Кога ще дойдеш", "Днес е слънчево", "Колко е красиво!", "Може би утре"],
+                correct: 2
+            },
+            {
+                question: "Коя дума е антоним на 'светъл'?",
+                answers: ["тъмен", "ярък", "блестящ", "сияен"],
+                correct: 0
+            },
+            {
+                question: "В коя дума има представка?",
+                answers: ["море", "риба", "подводница", "вода"],
+                correct: 2
+            },
+            {
+                question: "Кой е авторът на 'Под игото'?",
+                answers: ["Христо Ботев", "Иван Вазов", "Елин Пелин", "Йордан Йовков"],
+                correct: 1
+            },
+            {
+                question: "Каква част на речта е думата 'бързо'?",
+                answers: ["съществително", "прилагателно", "наречие", "глагол"],
+                correct: 2
+            },
+            {
+                question: "Колко срички има в думата 'училище'?",
+                answers: ["две", "три", "четири", "пет"],
+                correct: 2
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function checkAnswer(button) {
+            const buttons = document.querySelectorAll('.answer-btn');
+            buttons.forEach(btn => {
+                btn.disabled = true;
+                if (btn.getAttribute('data-correct') === 'true') {
+                    btn.classList.add('correct');
+                }
+            });
+
+            const correct = button.getAttribute('data-correct') === 'true';
+            if (!correct) {
+                button.classList.add('wrong');
+            }
+
+            if (correct) {
+                score++;
+            }
+
+            document.getElementById('nextBtn').disabled = false;
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            const questionNum = document.getElementById('currentQuestion');
+            questionNum.textContent = currentQuestionIndex + 1;
+
+            if (currentQuestionIndex >= questions.length) {
+                showResult();
+                return;
+            }
+
+            const question = questions[currentQuestionIndex];
+            document.querySelector('.question h2').textContent = question.question;
+
+            const buttons = document.querySelectorAll('.answer-btn');
+            buttons.forEach((btn, index) => {
+                btn.textContent = question.answers[index];
+                btn.disabled = false;
+                btn.className = 'answer-btn';
+                btn.setAttribute('data-correct', index === question.correct);
+            });
+
+            document.getElementById('nextBtn').disabled = true;
+        }
+
+        function showResult() {
+            const quizBox = document.querySelector('.quiz-box');
+            quizBox.innerHTML = `
+                <div class="result">
+                    <h2>Резултат: ${score} от ${questions.length}</h2>
+                    <button class="restart-btn" onclick="location.reload()">Опитай пак</button>
+                    <a href="../select.html" class="back-btn">Избери друг предмет</a>
+                </div>
+            `;
+        }
+    </script>
+</body>
+
+</html>

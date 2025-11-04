@@ -1,12 +1,14 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="bg">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>SoftQuiz - Select Quiz</title>
+  <title>Избери предмет - SoftQuiz</title>
   <link rel="stylesheet" href="project.css">
   <link rel="stylesheet" href="select.css">
 </head>
+
 <body>
   <header class="site-header">
     <div class="header-left">
@@ -17,18 +19,35 @@
       <a href="#" class="nav-link">ABOUT</a>
     </nav>
   </header>
-  <main class="hero">
-    <div class="quiz-container">
-      <h2 class="quiz-title">Select Your Quiz</h2>
-      <select class="quiz-select">
-        <option value="" disabled selected>Избери викторина</option>
-        <option value="option1">Английски</option>
-        <option value="option2">Литература</option>
-        <option value="option2">Математика</option>
-        <option value="option2">Биология</option>
-        <option value="option2">Физика</option>
-      </select>
+  <main class="subject-grid">
+    <h1 class="page-title">Избери предмет</h1>
+    <div class="subjects-container">
+      <a href="quizzes/bulgarian.html" class="subject-card">
+        <span class="subject-emoji">📚</span>
+        <h2>Български език</h2>
+      </a>
+      <a href="quizzes/math.html" class="subject-card">
+        <span class="subject-emoji">➗</span>
+        <h2>Математика</h2>
+      </a>
+      <a href="quizzes/geography.html" class="subject-card">
+        <span class="subject-emoji">🌍</span>
+        <h2>География</h2>
+      </a>
+      <a href="quizzes/physics.html" class="subject-card">
+        <span class="subject-emoji">⚡</span>
+        <h2>Физика</h2>
+      </a>
+      <a href="quizzes/chemistry.html" class="subject-card">
+        <span class="subject-emoji">🧪</span>
+        <h2>Химия</h2>
+      </a>
+      <a href="quizzes/biology.html" class="subject-card">
+        <span class="subject-emoji">🌿</span>
+        <h2>Биология</h2>
+      </a>
     </div>
   </main>
 </body>
+
 </html>

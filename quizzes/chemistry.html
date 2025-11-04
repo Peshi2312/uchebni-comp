@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="bg">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Химия - SoftQuiz</title>
+    <link rel="stylesheet" href="../project.css">
+    <link rel="stylesheet" href="quiz.css">
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <img class="site-logo" src="../b_50cfaf10b4a8d8ca72c0074ca7ced57e.png" alt="SoftUni logo">
+        </div>
+        <nav class="header-nav">
+            <a href="../project.html" class="nav-link">HOME</a>
+            <a href="../select.html" class="nav-link">ПРЕДМЕТИ</a>
+        </nav>
+    </header>
+    <main class="quiz-container">
+        <div class="quiz-progress">Въпрос <span id="currentQuestion">1</span> от <span id="totalQuestions">10</span>
+        </div>
+        <div class="quiz-box">
+            <div id="question" class="question">
+                <h2>Кой е химичният символ на водорода?</h2>
+            </div>
+            <div class="answers">
+                <button class="answer-btn" onclick="checkAnswer(this)" data-correct="true">H</button>
+                <button class="answer-btn" onclick="checkAnswer(this)">O</button>
+                <button class="answer-btn" onclick="checkAnswer(this)">He</button>
+                <button class="answer-btn" onclick="checkAnswer(this)">W</button>
+            </div>
+            <button id="nextBtn" class="next-btn" onclick="nextQuestion()" disabled>Следващ въпрос</button>
+        </div>
+    </main>
+    <script>
+        const questions = [
+            {
+                question: "Кой е химичният символ на водорода?",
+                answers: ["H", "O", "He", "W"],
+                correct: 0
+            },
+            {
+                question: "Коя е химичната формула на водата?",
+                answers: ["H2O2", "CO2", "H2O", "O2"],
+                correct: 2
+            },
+            {
+                question: "Какъв е атомният номер на въглерода?",
+                answers: ["4", "6", "8", "12"],
+                correct: 1
+            },
+            {
+                question: "Кой е най-разпространеният елемент в земната кора?",
+                answers: ["Желязо", "Кислород", "Силиций", "Алуминий"],
+                correct: 1
+            },
+            {
+                question: "Какъв е цветът на чистия хлор?",
+                answers: ["Безцветен", "Син", "Жълто-зелен", "Червен"],
+                correct: 2
+            },
+            {
+                question: "Кое е основното свойство на благородните газове?",
+                answers: ["Химическа инертност", "Висока реактивност", "Метален блясък", "Токсичност"],
+                correct: 0
+            },
+            {
+                question: "Каква е химичната формула на готварската сол?",
+                answers: ["NaCl", "CaCO3", "H2SO4", "KCl"],
+                correct: 0
+            },
+            {
+                question: "Кой метал е течен при стайна температура?",
+                answers: ["Олово", "Желязо", "Живак", "Мед"],
+                correct: 2
+            },
+            {
+                question: "Какво е pH на чистата вода?",
+                answers: ["0", "7", "14", "10"],
+                correct: 1
+            },
+            {
+                question: "Кой елемент е основен за органичните съединения?",
+                answers: ["Азот", "Кислород", "Въглерод", "Водород"],
+                correct: 2
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function checkAnswer(button) {
+            const buttons = document.querySelectorAll('.answer-btn');
+            buttons.forEach(btn => {
+                btn.disabled = true;
+                if (btn.getAttribute('data-correct') === 'true') {
+                    btn.classList.add('correct');
+                }
+            });
+
+            const correct = button.getAttribute('data-correct') === 'true';
+            if (!correct) {
+                button.classList.add('wrong');
+            }
+
+            if (correct) {
+                score++;
+            }
+
+            document.getElementById('nextBtn').disabled = false;
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            const questionNum = document.getElementById('currentQuestion');
+            questionNum.textContent = currentQuestionIndex + 1;
+
+            if (currentQuestionIndex >= questions.length) {
+                showResult();
+                return;
+            }
+
+            const question = questions[currentQuestionIndex];
+            document.querySelector('.question h2').textContent = question.question;
+
+            const buttons = document.querySelectorAll('.answer-btn');
+            buttons.forEach((btn, index) => {
+                btn.textContent = question.answers[index];
+                btn.disabled = false;
+                btn.className = 'answer-btn';
+                btn.setAttribute('data-correct', index === question.correct);
+            });
+
+            document.getElementById('nextBtn').disabled = true;
+        }
+
+        function showResult() {
+            const quizBox = document.querySelector('.quiz-box');
+            quizBox.innerHTML = `
+                <div class="result">
+                    <h2>Резултат: ${score} от ${questions.length}</h2>
+                    <button class="restart-btn" onclick="location.reload()">Опитай пак</button>
+                    <a href="../select.html" class="back-btn">Избери друг предмет</a>
+                </div>
+            `;
+        }
+    </script>
+</body>
+
+</html>

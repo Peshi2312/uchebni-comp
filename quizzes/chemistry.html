@@ -24,6 +24,7 @@
         </div>
         <div class="quiz-box">
             <div id="question" class="question">
+                <div class="timer">20</div>
                 <h2>Кой е химичният символ на водорода?</h2>
             </div>
             <div class="answers">
@@ -32,67 +33,68 @@
                 <button class="answer-btn" onclick="checkAnswer(this)">He</button>
                 <button class="answer-btn" onclick="checkAnswer(this)">W</button>
             </div>
-            <button id="nextBtn" class="next-btn" onclick="nextQuestion()" disabled>Следващ въпрос</button>
+            <div class="quiz-actions">
+                <button id="hintBtn" class="hint-btn" type="button" onclick="showHint()">💡 Подсказка</button>
+                <button id="nextBtn" class="next-btn" onclick="nextQuestion()" disabled>Следващ въпрос</button>
+            </div>
+            <div id="hintBox" class="hint-box" aria-live="polite" hidden></div>
         </div>
     </main>
     <script>
         const questions = [
-            {
-                question: "Кой е химичният символ на водорода?",
-                answers: ["H", "O", "He", "W"],
-                correct: 0
-            },
-            {
-                question: "Коя е химичната формула на водата?",
-                answers: ["H2O2", "CO2", "H2O", "O2"],
-                correct: 2
-            },
-            {
-                question: "Какъв е атомният номер на въглерода?",
-                answers: ["4", "6", "8", "12"],
-                correct: 1
-            },
-            {
-                question: "Кой е най-разпространеният елемент в земната кора?",
-                answers: ["Желязо", "Кислород", "Силиций", "Алуминий"],
-                correct: 1
-            },
-            {
-                question: "Какъв е цветът на чистия хлор?",
-                answers: ["Безцветен", "Син", "Жълто-зелен", "Червен"],
-                correct: 2
-            },
-            {
-                question: "Кое е основното свойство на благородните газове?",
-                answers: ["Химическа инертност", "Висока реактивност", "Метален блясък", "Токсичност"],
-                correct: 0
-            },
-            {
-                question: "Каква е химичната формула на готварската сол?",
-                answers: ["NaCl", "CaCO3", "H2SO4", "KCl"],
-                correct: 0
-            },
-            {
-                question: "Кой метал е течен при стайна температура?",
-                answers: ["Олово", "Желязо", "Живак", "Мед"],
-                correct: 2
-            },
-            {
-                question: "Какво е pH на чистата вода?",
-                answers: ["0", "7", "14", "10"],
-                correct: 1
-            },
-            {
-                question: "Кой елемент е основен за органичните съединения?",
-                answers: ["Азот", "Кислород", "Въглерод", "Водород"],
-                correct: 2
-            }
+            { question: "Кой е химичният символ на водорода?", answers: ["H", "O", "He", "W"], correct: 0, hint: "Химичният символ на водорода е H." },
+            { question: "Коя е химичната формула на водата?", answers: ["H2O2", "CO2", "H2O", "O2"], correct: 2, hint: "Водата е H2O (2 водородни атома и 1 кислород)." },
+            { question: "Какъв е атомният номер на въглерода?", answers: ["4", "6", "8", "12"], correct: 1, hint: "Атомният номер на въглерода е 6 (6 протона)." },
+            { question: "Кой е най-разпространеният елемент в земната кора?", answers: ["Желязо", "Кислород", "Силиций", "Алуминий"], correct: 1, hint: "Кислородът и силицият са много разпространени; кислородът е най-разпространен." },
+            { question: "Какъв е цветът на чистия хлор?", answers: ["Безцветен", "Син", "Жълто-зелен", "Червен"], correct: 2, hint: "Чистият хлор има жълто-зелен цвят." },
+            { question: "Кое е основното свойство на благородните газове?", answers: ["Химическа инертност", "Висока реактивност", "Метален блясък", "Токсичност"], correct: 0, hint: "Благородните газове са химически инертни (малко реагират)." },
+            { question: "Каква е химичната формула на готварската сол?", answers: ["NaCl", "CaCO3", "H2SO4", "KCl"], correct: 0, hint: "Готварската сол е натриев хлорид — NaCl." },
+            { question: "Кой метал е течен при стайна температура?", answers: ["Олово", "Желязо", "Живак", "Мед"], correct: 2, hint: "Живакът (Hg) е течен при стайна температура." },
+            { question: "Какво е pH на чистата вода?", answers: ["0", "7", "14", "10"], correct: 1, hint: "Чистата вода има pH около 7 (неутрално)." },
+            { question: "Кой елемент е основен за органичните съединения?", answers: ["Азот", "Кислород", "Въглерод", "Водород"], correct: 2, hint: "Въглеродът е основен за органичните съединения." }
         ];
 
         let currentQuestionIndex = 0;
         let score = 0;
+        let timer = null;
+        const QUESTION_TIME = 20;
+
+        // Start timer when page loads
+        window.onload = () => {
+            startTimer();
+        };
+
+        function startTimer() {
+            clearInterval(timer);
+            let timeLeft = QUESTION_TIME;
+            const timerElement = document.querySelector('.timer');
+            timerElement.textContent = timeLeft;
+            timerElement.classList.remove('warning');
+
+            timer = setInterval(() => {
+                timeLeft--;
+                timerElement.textContent = timeLeft;
+                
+                if (timeLeft <= 5) {
+                    timerElement.classList.add('warning');
+                }
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    const buttons = document.querySelectorAll('.answer-btn');
+                    buttons.forEach(btn => {
+                        btn.disabled = true;
+                        if (btn.getAttribute('data-correct') === 'true') {
+                            btn.classList.add('correct');
+                        }
+                    });
+                    document.getElementById('nextBtn').disabled = false;
+                }
+            }, 1000);
+        }
 
         function checkAnswer(button) {
+            clearInterval(timer);
             const buttons = document.querySelectorAll('.answer-btn');
             buttons.forEach(btn => {
                 btn.disabled = true;
@@ -134,14 +136,42 @@
                 btn.setAttribute('data-correct', index === question.correct);
             });
 
+            const hintBox = document.getElementById('hintBox');
+            hintBox.hidden = true;
+            hintBox.textContent = question.hint || '';
+
             document.getElementById('nextBtn').disabled = true;
+            startTimer();
+        }
+
+        function showHint() {
+            const hintBox = document.getElementById('hintBox');
+            const question = questions[currentQuestionIndex];
+            hintBox.textContent = question.hint || 'Няма наличен хинт.';
+            hintBox.hidden = false;
+        }
+
+        function calculateGrade(score, total) {
+            const percentage = (score / total) * 100;
+            if (percentage >= 90) return "Отличен 6";
+            if (percentage >= 80) return "Много добър 5";
+            if (percentage >= 70) return "Добър 4";
+            if (percentage >= 60) return "Среден 3";
+            return "Слаб 2";
         }
 
         function showResult() {
             const quizBox = document.querySelector('.quiz-box');
+            const grade = calculateGrade(score, questions.length);
+            const percentage = Math.round((score / questions.length) * 100);
+            
             quizBox.innerHTML = `
                 <div class="result">
                     <h2>Резултат: ${score} от ${questions.length}</h2>
+                    <div class="grade-box">
+                        <p class="percentage">${percentage}% верни отговори</p>
+                        <p class="final-grade">Крайна оценка: ${grade}</p>
+                    </div>
                     <button class="restart-btn" onclick="location.reload()">Опитай пак</button>
                     <a href="../select.html" class="back-btn">Избери друг предмет</a>
                 </div>

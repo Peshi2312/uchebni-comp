@@ -24,6 +24,7 @@
         </div>
         <div class="quiz-box">
             <div id="question" class="question">
+                <div class="timer">20</div>
                 <h2>Коя е основната единица за измерване на сила?</h2>
             </div>
             <div class="answers">
@@ -32,67 +33,68 @@
                 <button class="answer-btn" onclick="checkAnswer(this)">Паскал</button>
                 <button class="answer-btn" onclick="checkAnswer(this)">Ват</button>
             </div>
-            <button id="nextBtn" class="next-btn" onclick="nextQuestion()" disabled>Следващ въпрос</button>
+            <div class="quiz-actions">
+                <button id="hintBtn" class="hint-btn" type="button" onclick="showHint()">💡 Подсказка</button>
+                <button id="nextBtn" class="next-btn" onclick="nextQuestion()" disabled>Следващ въпрос</button>
+            </div>
+            <div id="hintBox" class="hint-box" aria-live="polite" hidden></div>
         </div>
     </main>
     <script>
         const questions = [
-            {
-                question: "Коя е основната единица за измерване на сила?",
-                answers: ["Нютон", "Джаул", "Паскал", "Ват"],
-                correct: 0
-            },
-            {
-                question: "Какво е ускорението на свободното падане на Земята?",
-                answers: ["5 м/с²", "7.8 м/с²", "9.8 м/с²", "12 м/с²"],
-                correct: 2
-            },
-            {
-                question: "Коя е основната единица за електрическо напрежение?",
-                answers: ["Ампер", "Волт", "Ом", "Ват"],
-                correct: 1
-            },
-            {
-                question: "Кой учен открива закона за гравитацията?",
-                answers: ["Айнщайн", "Нютон", "Галилей", "Фарадей"],
-                correct: 1
-            },
-            {
-                question: "Каква е мерната единица за мощност?",
-                answers: ["Ват", "Джаул", "Нютон", "Волт"],
-                correct: 0
-            },
-            {
-                question: "При каква температура замръзва водата?",
-                answers: ["0°C", "-5°C", "5°C", "100°C"],
-                correct: 0
-            },
-            {
-                question: "Коя е най-бързо движещата се частица?",
-                answers: ["Електрон", "Протон", "Фотон", "Неутрон"],
-                correct: 2
-            },
-            {
-                question: "Каква е формулата за енергия според Айнщайн?",
-                answers: ["E=mc²", "F=ma", "P=mv", "E=mgh"],
-                correct: 0
-            },
-            {
-                question: "Кое е агрегатното състояние на водата при 25°C?",
-                answers: ["Твърдо", "Течно", "Газообразно", "Плазма"],
-                correct: 1
-            },
-            {
-                question: "Коя е мерната единица за електрическо съпротивление?",
-                answers: ["Волт", "Ампер", "Ом", "Ват"],
-                correct: 2
-            }
+            { question: "Коя е основната единица за измерване на сила?", answers: ["Нютон", "Джаул", "Паскал", "Ват"], correct: 0, hint: "Силата се измерва в нютони (N)." },
+            { question: "Какво е ускорението на свободното падане на Земята?", answers: ["5 м/с²", "7.8 м/с²", "9.8 м/с²", "12 м/с²"], correct: 2, hint: "Около 9.8 м/с² при повърхността на Земята." },
+            { question: "Коя е основната единица за електрическо напрежение?", answers: ["Ампер", "Волт", "Ом", "Ват"], correct: 1, hint: "Напрежението се измерва във волтове (V)." },
+            { question: "Кой учен открива закона за гравитацията?", answers: ["Айнщайн", "Нютон", "Галилей", "Фарадей"], correct: 1, hint: "Исаак Нютон описва универсалния закон за гравитацията." },
+            { question: "Каква е мерната единица за мощност?", answers: ["Ват", "Джаул", "Нютон", "Волт"], correct: 0, hint: "Мощността се измерва във ватове (W)." },
+            { question: "При каква температура замръзва водата?", answers: ["0°C", "-5°C", "5°C", "100°C"], correct: 0, hint: "Водата замръзва при 0°C при нормално атмосферно налягане." },
+            { question: "Коя е най-бързо движещата се частица?", answers: ["Електрон", "Протон", "Фотон", "Неутрон"], correct: 2, hint: "Фотонът (светлината) пътува с максималната скорост - скоростта на светлината." },
+            { question: "Каква е формулата за енергия според Айнщайн?", answers: ["E=mc²", "F=ma", "P=mv", "E=mgh"], correct: 0, hint: "Енергията и масата са свързани чрез E=mc²." },
+            { question: "Кое е агрегатното състояние на водата при 25°C?", answers: ["Твърдо", "Течно", "Газообразно", "Плазма"], correct: 1, hint: "При 25°C водата е в течно състояние." },
+            { question: "Коя е мерната единица за електрическо съпротивление?", answers: ["Волт", "Ампер", "Ом", "Ват"], correct: 2, hint: "Съпротивлението се измерва в омове (Ω)." }
         ];
 
         let currentQuestionIndex = 0;
         let score = 0;
+        let timer = null;
+        const QUESTION_TIME = 20;
+
+        // Start timer when page loads
+        window.onload = () => {
+            startTimer();
+        };
+
+        function startTimer() {
+            clearInterval(timer);
+            let timeLeft = QUESTION_TIME;
+            const timerElement = document.querySelector('.timer');
+            timerElement.textContent = timeLeft;
+            timerElement.classList.remove('warning');
+
+            timer = setInterval(() => {
+                timeLeft--;
+                timerElement.textContent = timeLeft;
+                
+                if (timeLeft <= 5) {
+                    timerElement.classList.add('warning');
+                }
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    const buttons = document.querySelectorAll('.answer-btn');
+                    buttons.forEach(btn => {
+                        btn.disabled = true;
+                        if (btn.getAttribute('data-correct') === 'true') {
+                            btn.classList.add('correct');
+                        }
+                    });
+                    document.getElementById('nextBtn').disabled = false;
+                }
+            }, 1000);
+        }
 
         function checkAnswer(button) {
+            clearInterval(timer);
             const buttons = document.querySelectorAll('.answer-btn');
             buttons.forEach(btn => {
                 btn.disabled = true;
@@ -134,14 +136,42 @@
                 btn.setAttribute('data-correct', index === question.correct);
             });
 
+            const hintBox = document.getElementById('hintBox');
+            hintBox.hidden = true;
+            hintBox.textContent = question.hint || '';
+
             document.getElementById('nextBtn').disabled = true;
+            startTimer();
+        }
+
+        function showHint() {
+            const hintBox = document.getElementById('hintBox');
+            const question = questions[currentQuestionIndex];
+            hintBox.textContent = question.hint || 'Няма наличен хинт.';
+            hintBox.hidden = false;
+        }
+
+        function calculateGrade(score, total) {
+            const percentage = (score / total) * 100;
+            if (percentage >= 90) return "Отличен 6";
+            if (percentage >= 80) return "Много добър 5";
+            if (percentage >= 70) return "Добър 4";
+            if (percentage >= 60) return "Среден 3";
+            return "Слаб 2";
         }
 
         function showResult() {
             const quizBox = document.querySelector('.quiz-box');
+            const grade = calculateGrade(score, questions.length);
+            const percentage = Math.round((score / questions.length) * 100);
+            
             quizBox.innerHTML = `
                 <div class="result">
                     <h2>Резултат: ${score} от ${questions.length}</h2>
+                    <div class="grade-box">
+                        <p class="percentage">${percentage}% верни отговори</p>
+                        <p class="final-grade">Крайна оценка: ${grade}</p>
+                    </div>
                     <button class="restart-btn" onclick="location.reload()">Опитай пак</button>
                     <a href="../select.html" class="back-btn">Избери друг предмет</a>
                 </div>

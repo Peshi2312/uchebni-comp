@@ -61,6 +61,7 @@ html, body {
 .header-nav {
   display: flex;
   gap: 30px;
+  margin-right: 60px; /* Оставяме място за таймера */
 }
 
 .nav-link {

@@ -24,6 +24,7 @@
         </div>
         <div class="quiz-box">
             <div id="question" class="question">
+                <div class="timer">20</div>
                 <h2>Коя е столицата на България?</h2>
             </div>
             <div class="answers">
@@ -32,7 +33,11 @@
                 <button class="answer-btn" onclick="checkAnswer(this)">Пловдив</button>
                 <button class="answer-btn" onclick="checkAnswer(this)">Бургас</button>
             </div>
-            <button id="nextBtn" class="next-btn" onclick="nextQuestion()" disabled>Следващ въпрос</button>
+            <div class="quiz-actions">
+                <button id="hintBtn" class="hint-btn" type="button" onclick="showHint()">💡 Подсказка</button>
+                <button id="nextBtn" class="next-btn" onclick="nextQuestion()" disabled>Следващ въпрос</button>
+            </div>
+            <div id="hintBox" class="hint-box" aria-live="polite" hidden></div>
         </div>
     </main>
     <script>
@@ -40,59 +45,106 @@
             {
                 question: "Коя е столицата на България?",
                 answers: ["София", "Варна", "Пловдив", "Бургас"],
-                correct: 0
+                correct: 0,
+                hint: "Столицата е София — административният център на държавата."
             },
             {
                 question: "Кой е най-високият връх в България?",
                 answers: ["Вихрен", "Мусала", "Ботев", "Черни връх"],
-                correct: 1
+                correct: 1,
+                hint: "Връх Мусала в Рила е най-висок — 2925 м."
             },
             {
                 question: "На кой континент се намира България?",
                 answers: ["Азия", "Африка", "Европа", "Америка"],
-                correct: 2
+                correct: 2,
+                hint: "България е в Европа."
             },
             {
                 question: "С коя държава НЕ граничи България?",
                 answers: ["Гърция", "Румъния", "Унгария", "Турция"],
-                correct: 2
+                correct: 2,
+                hint: "Унгария не е съсед — е по-на северозапад."
             },
             {
                 question: "Кое море мие бреговете на България?",
                 answers: ["Черно море", "Средиземно море", "Адриатическо море", "Егейско море"],
-                correct: 0
+                correct: 0,
+                hint: "Черно море граничи с България на изток."
             },
             {
                 question: "Коя е най-дългата река в България?",
                 answers: ["Дунав", "Марица", "Искър", "Струма"],
-                correct: 0
+                correct: 0,
+                hint: "Дунавът мие северната граница на България и е най-дългата река."
             },
             {
                 question: "Кое е най-голямото езеро в България?",
                 answers: ["Варненско", "Бургаско", "Поморийско", "Сребърна"],
-                correct: 0
+                correct: 0,
+                hint: "Варненското езеро е от големите крайморски езера."
             },
             {
                 question: "В коя планина се намира връх Мусала?",
                 answers: ["Пирин", "Рила", "Стара планина", "Родопи"],
-                correct: 1
+                correct: 1,
+                hint: "Мусала е в планината Рила."
             },
             {
                 question: "Кой е най-големият град по население след София?",
                 answers: ["Варна", "Пловдив", "Бургас", "Русе"],
-                correct: 1
+                correct: 1,
+                hint: "Пловдив е вторият по големина град в България."
             },
             {
                 question: "През коя планина минава Шипченският проход?",
                 answers: ["Рила", "Пирин", "Родопи", "Стара планина"],
-                correct: 3
+                correct: 3,
+                hint: "Шипченският проход е част от Стара планина."
             }
         ];
 
         let currentQuestionIndex = 0;
         let score = 0;
+        let timer = null;
+        const QUESTION_TIME = 20;
+
+        // Start timer when page loads
+        window.onload = () => {
+            startTimer();
+        };
+
+        function startTimer() {
+            clearInterval(timer);
+            let timeLeft = QUESTION_TIME;
+            const timerElement = document.querySelector('.timer');
+            timerElement.textContent = timeLeft;
+            timerElement.classList.remove('warning');
+
+            timer = setInterval(() => {
+                timeLeft--;
+                timerElement.textContent = timeLeft;
+                
+                if (timeLeft <= 5) {
+                    timerElement.classList.add('warning');
+                }
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    const buttons = document.querySelectorAll('.answer-btn');
+                    buttons.forEach(btn => {
+                        btn.disabled = true;
+                        if (btn.getAttribute('data-correct') === 'true') {
+                            btn.classList.add('correct');
+                        }
+                    });
+                    document.getElementById('nextBtn').disabled = false;
+                }
+            }, 1000);
+        }
 
         function checkAnswer(button) {
+            clearInterval(timer);
             const buttons = document.querySelectorAll('.answer-btn');
             buttons.forEach(btn => {
                 btn.disabled = true;
@@ -134,14 +186,43 @@
                 btn.setAttribute('data-correct', index === question.correct);
             });
 
+            // hide hint and update hint text for new question
+            const hintBox = document.getElementById('hintBox');
+            hintBox.hidden = true;
+            hintBox.textContent = question.hint || '';
+
             document.getElementById('nextBtn').disabled = true;
+            startTimer();
+        }
+
+        function showHint() {
+            const hintBox = document.getElementById('hintBox');
+            const question = questions[currentQuestionIndex];
+            hintBox.textContent = question.hint || 'Няма наличен хинт.';
+            hintBox.hidden = false;
+        }
+
+        function calculateGrade(score, total) {
+            const percentage = (score / total) * 100;
+            if (percentage >= 90) return "Отличен 6";
+            if (percentage >= 80) return "Много добър 5";
+            if (percentage >= 70) return "Добър 4";
+            if (percentage >= 60) return "Среден 3";
+            return "Слаб 2";
         }
 
         function showResult() {
             const quizBox = document.querySelector('.quiz-box');
+            const grade = calculateGrade(score, questions.length);
+            const percentage = Math.round((score / questions.length) * 100);
+            
             quizBox.innerHTML = `
                 <div class="result">
                     <h2>Резултат: ${score} от ${questions.length}</h2>
+                    <div class="grade-box">
+                        <p class="percentage">${percentage}% верни отговори</p>
+                        <p class="final-grade">Крайна оценка: ${grade}</p>
+                    </div>
                     <button class="restart-btn" onclick="location.reload()">Опитай пак</button>
                     <a href="../select.html" class="back-btn">Избери друг предмет</a>
                 </div>

@@ -124,11 +124,11 @@
             timer = setInterval(() => {
                 timeLeft--;
                 timerElement.textContent = timeLeft;
-                
+
                 if (timeLeft <= 5) {
                     timerElement.classList.add('warning');
                 }
-                
+
                 if (timeLeft <= 0) {
                     clearInterval(timer);
                     const buttons = document.querySelectorAll('.answer-btn');
@@ -215,7 +215,7 @@
             const quizBox = document.querySelector('.quiz-box');
             const grade = calculateGrade(score, questions.length);
             const percentage = Math.round((score / questions.length) * 100);
-            
+
             quizBox.innerHTML = `
                 <div class="result">
                     <h2>Резултат: ${score} от ${questions.length}</h2>

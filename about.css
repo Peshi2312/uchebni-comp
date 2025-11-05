@@ -1,0 +1,94 @@
+/* Make the About page follow the project's visual theme (project.css)
+   - dark background, bold rounded font, fixed header spacing
+   - card-like sections matching .subject-card styles
+*/
+
+/* Ensure page can scroll even though project.css hides overflow on some pages */
+html, body {
+  overflow: auto !important;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  font-family: "Arial Rounded MT Bold", "Helvetica Rounded", Arial, "Nimbus Sans Rounded", sans-serif;
+  font-weight: 700;
+  background: var(--primary-color, #071034);
+  color: var(--accent-color, #ffffff);
+}
+
+.content {
+  min-height: 100vh;
+  padding: 120px 40px 40px; /* leave room for fixed header */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  background: transparent;
+}
+
+.about-hero{
+  text-align: center;
+  color: var(--accent-color, #ffffff);
+  padding: 8px 16px 6px;
+}
+.about-hero h1{
+  margin: 0 0 6px;
+  font-size: 3rem;
+  letter-spacing: 8px;
+  color: var(--accent-color, #ffffff);
+}
+.about-hero .lead{
+  margin: 0;
+  color: rgba(255,255,255,0.9);
+  font-size: 1.05rem;
+  max-width: 900px;
+}
+
+/* Card-like sections that match .subject-card in select.css */
+.about-goal, .how-to-use, .contribute{
+  background: rgba(255,255,255,0.06);
+  border: 2px solid var(--accent-color, #ffffff);
+  border-radius: 15px;
+  padding: 20px;
+  margin: 0 auto;
+  max-width: 900px;
+  width: 100%;
+  color: var(--accent-color, #ffffff);
+}
+
+.about-goal h2, .how-to-use h2, .contribute h2{
+  margin-top: 0;
+  color: var(--accent-color, #ffffff);
+}
+
+.about-goal ul, .how-to-use ol{
+  margin: 10px 0 0 20px;
+  color: rgba(255,255,255,0.95);
+}
+
+.contribute p{
+  margin: 8px 0 0;
+}
+
+.back-link{
+  margin-top: 8px;
+}
+.back-link a{
+  color: var(--accent-color, #ffffff);
+  text-decoration: none;
+}
+.back-link a:hover{
+  text-decoration: underline;
+}
+
+/* small screens */
+@media (max-width:600px){
+  .about-hero h1{font-size:2rem; letter-spacing:6px}
+  .content{padding:100px 16px 24px}
+}
+
+/* accessibility focus styles */
+a:focus{
+  outline: 3px solid rgba(255,255,255,0.12);
+  outline-offset: 2px;
+}
+

@@ -4,7 +4,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: var(--primary-color);
+    /* patterned background behind the cards (kept behind, cards remain semi-opaque) */
+    background-image: url("Background_Game.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .page-title {
@@ -16,7 +20,7 @@
 
 .subjects-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
     max-width: 1200px;
     width: 100%;
@@ -25,7 +29,7 @@
 .subject-card {
     background: rgba(255, 255, 255, 0.1);
     border: 2px solid var(--accent-color);
-    border-radius: 15px;
+    border-radius: var(--radius);
     padding: 2rem;
     text-align: center;
     color: var(--accent-color);
@@ -36,28 +40,38 @@
     align-items: center;
     gap: 1rem;
     cursor: pointer;
+    overflow: hidden; /* ensure children respect rounded corners */
 }
+
 .subject-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.15);
 }
 
 .subject-emoji {
-  font-size: 3rem;
-  display: block;
-  margin-bottom: 0.5rem;
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+/* Math card image styling */
+.math-icon {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    display: block;
+    margin-bottom: 0.5rem;
+    transition: transform 0.25s ease;
+}
+
+.subject-card[href*="math.html"]:hover .math-icon {
+    transform: scale(1.08);
 }
 
 .subject-card h2 {
-  font-size: 1.5rem;
-  margin: 0;
-  font-weight: 700;
-}
-
-/* make all cards visually even height */
-.subject-card {
-  min-height: 220px;
-  justify-content: center;
+    font-size: 1.5rem;
+    margin: 0;
+    font-weight: 700;
 }
  

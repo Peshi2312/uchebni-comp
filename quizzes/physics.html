@@ -160,15 +160,25 @@
             return "Слаб 2";
         }
 
+        function getEmojiForPercentage(percentage) {
+            if (percentage >= 90) return '🏆😄';
+            if (percentage >= 80) return '😃';
+            if (percentage >= 70) return '🙂';
+            if (percentage >= 60) return '😐';
+            return '😞';
+        }
+
         function showResult() {
             const quizBox = document.querySelector('.quiz-box');
             const grade = calculateGrade(score, questions.length);
             const percentage = Math.round((score / questions.length) * 100);
+            const emoji = getEmojiForPercentage(percentage);
 
             quizBox.innerHTML = `
                 <div class="result">
                     <h2>Резултат: ${score} от ${questions.length}</h2>
                     <div class="grade-box">
+                        <div class="grade-emoji">${emoji}</div>
                         <p class="percentage">${percentage}% верни отговори</p>
                         <p class="final-grade">Крайна оценка: ${grade}</p>
                     </div>

@@ -1,6 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800;900&display=swap');
+
 :root {
   --primary-color: #071034;
   --accent-color: #ffffff;
+  --radius: 18px; /* global corner radius */
 }
 
 html, body {
@@ -9,11 +12,40 @@ html, body {
   padding: 0;
   width: 100%;
   max-width: 100%;
-  font-family: "Arial Rounded MT Bold", "Helvetica Rounded", Arial, "Nimbus Sans Rounded", sans-serif;
-  font-weight: 700;
+  font-family: 'Poppins', "Arial Rounded MT Bold", "Helvetica Rounded", Arial, sans-serif;
+  font-weight: 400;
+  /* Improve font rendering (antialiasing/smoothing) */
+  -webkit-font-smoothing: antialiased; /* Chrome, Safari, Opera */
+  -moz-osx-font-smoothing: grayscale;  /* Firefox on macOS */
+  text-rendering: optimizeLegibility;
+  -webkit-text-size-adjust: 100%;
   overflow: hidden;
   background: var(--primary-color);
   position: relative;
+}
+
+/* Apply smoothing to key readable elements to improve perceived edge smoothness */
+.logo-title,
+.start-btn,
+.subject-card,
+.subject-card h2,
+.subject-emoji,
+.quiz-box,
+.question h2,
+.answer-btn,
+.hint-btn,
+.next-btn,
+.restart-btn,
+.back-btn {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Gentle text shadow can help visually smooth very bold text on some displays */
+.logo-title,
+.question h2 {
+  text-shadow: 0 0.5px rgba(0,0,0,0.12);
 }
 
 .hero {
@@ -27,7 +59,7 @@ html, body {
   justify-content: center;
   color: var(--accent-color);
   text-align: center;
-  background-image: url("Artboard 2.png");
+  background-image: url("Background_Game.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -79,32 +111,34 @@ html, body {
 }
 
 .logo-title {
-  font-size: 5.5rem;
+  font-size: 6.5rem;
   font-family: "Arial Rounded MT Bold", "Helvetica Rounded", Arial, sans-serif;
-  font-weight: 700;
-  letter-spacing: 8px;
-  margin: 0 0 2rem;
+  font-weight: 900;
+  letter-spacing: 10px;
+  margin: 0 0 1.5rem;
   color: var(--accent-color);
-  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  text-transform: uppercase;
+  text-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
 }
 
 .start-btn {
   margin-top: 2rem;
-  padding: 12px 40px;
+  padding: 14px 48px;
   background: transparent;
   color: var(--accent-color);
   text-decoration: none;
-  border: 2px solid var(--accent-color);
-  border-radius: 25px;
-  font-size: 1.1rem;
-  letter-spacing: 1px;
-  transition: all 0.3s ease;
+  border: 3px solid var(--accent-color);
+  border-radius: 30px;
+  font-size: 1.25rem;
+  letter-spacing: 1.5px;
+  transition: all 0.25s ease;
   font-family: "Arial Rounded MT Bold", "Helvetica Rounded", Arial, sans-serif;
-  font-weight: 700;
+  font-weight: 800;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
 }
 
 .start-btn:hover {
-  background: rgba(255, 255, 255, 0.15);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.18);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.32);
 }

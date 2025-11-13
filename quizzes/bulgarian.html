@@ -46,53 +46,61 @@
                 question: "Коя от думите е съществително име?",
                 answers: ["книга", "чета", "бърз", "красиво"],
                 correct: 0,
-                hint: "Съществителните имена са предмети или неща — 'книга' е пример."
+                hint: "Съществителните имена назовават предмети. Помисли кои думи назовават конкретни неща."
             },
             {
                 question: "В кое изречение има глагол?",
                 answers: ["Денят е слънчев.", "Той пише писмо.", "Красива градина.", "Синьо небе."],
                 correct: 1,
-                hint: "Глаголите описват действие — 'пише' е глагол."
+                hint: "Глаголите описват какво деламе. Кое изречение има дума, която показва действие?"
             },
             {
                 question: "Коя дума е синоним на 'храбър'?",
                 answers: ["страхлив", "смел", "тъжен", "весел"],
-                correct: 1
+                correct: 1,
+                hint: "Синоним имат близко значение. Кое прилагателно е противоположно на 'страхлив'?"
             },
             {
                 question: "Какъв е правилният правопис?",
                 answers: ["връстник", "връздух", "вързел", "връзка"],
-                correct: 3
+                correct: 3,
+                hint: "Раздели всяка дума на срички. Коя звучи правилно при произношение?"
             },
             {
                 question: "Кое изречение е възклицателно?",
                 answers: ["Кога ще дойдеш", "Днес е слънчево", "Колко е красиво!", "Може би утре"],
-                correct: 2
+                correct: 2,
+                hint: "Възклицателните изречения показват силни чувства. Кое изречение тражи емоция и восторг?"
             },
             {
                 question: "Коя дума е антоним на 'светъл'?",
                 answers: ["тъмен", "ярък", "блестящ", "сияен"],
-                correct: 0
+                correct: 0,
+                hint: "Антоним имат противоположно значение. Което е противоположност на светлото?"
             },
             {
                 question: "В коя дума има представка?",
                 answers: ["море", "риба", "подводница", "вода"],
-                correct: 2
+                correct: 2,
+                hint: "Представката е предлог в началото на думата. Коя дума започва с наставка като 'под', 'по', 'пред'?"
             },
             {
                 question: "Кой е авторът на 'Под игото'?",
                 answers: ["Христо Ботев", "Иван Вазов", "Елин Пелин", "Йордан Йовков"],
-                correct: 1
+                correct: 1,
+                hint: "Този автор е класик в българската литература, известен със своите романи. Помисли за известния писател от 19-ти век."
             },
             {
                 question: "Каква част на речта е думата 'бързо'?",
                 answers: ["съществително", "прилагателно", "наречие", "глагол"],
-                correct: 2
+                correct: 2,
+                hint: "Наречиците описват как се делат действия. 'Бързо' описва начина, по който действаме."
             },
             {
                 question: "Колко срички има в думата 'училище'?",
                 answers: ["две", "три", "четири", "пет"],
-                correct: 2
+                correct: 2,
+                hint: "Пресметни броя на частите в думата като разделиш по вокали. У-чи-ли-ще."
             }
         ];
 
@@ -187,11 +195,35 @@
             startTimer();
         }
 
-        function showHint() {
+        async function showHint() {
             const hintBox = document.getElementById('hintBox');
+            const hintBtn = document.getElementById('hintBtn');
             const question = questions[currentQuestionIndex];
-            hintBox.textContent = question.hint || 'Няма наличен хинт.';
+
+            // Show loading state
+            hintBox.textContent = 'Генериране на хинт...';
             hintBox.hidden = false;
+            hintBtn.disabled = true;
+
+            try {
+                const response = await fetch('http://localhost:3000/api/hint', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ question: question.question }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch hint');
+                }
+
+                const data = await response.json();
+                hintBox.textContent = data.hint || 'Няма наличен хинт.';
+            } catch (error) {
+                console.error('Error fetching hint:', error);
+                hintBox.textContent = question.hint || 'Не успя да се заредят подсказките. Опитайте пак.';
+            } finally {
+                hintBtn.disabled = false;
+            }
         }
 
         function calculateGrade(score, total) {

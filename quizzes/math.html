@@ -46,61 +46,61 @@
                 question: "Колко е 15 + 27?",
                 answers: ["42", "41", "43", "40"],
                 correct: 0,
-                hint: "Съберете 15 и 27: 15 + 25 = 40, плюс още 2 = 42."
+                hint: "Помисли за това как събираш числа. Разбий числото 27 на части."
             },
             {
                 question: "Колко е 8 × 7?",
                 answers: ["54", "56", "58", "52"],
                 correct: 1,
-                hint: "8 × 7 е същото като 7 × 8 = 56."
+                hint: "Помисли за таблицата за умножение. Ако 8 × 6 = 48, колко е 8 × 7?"
             },
             {
                 question: "Колко е 100 ÷ 4?",
                 answers: ["20", "25", "24", "28"],
                 correct: 1,
-                hint: "100 разделено на 4 = 25."
+                hint: "Деленето е обратното на умножението. 4 × какво число = 100?"
             },
             {
                 question: "Колко е 5²?",
                 answers: ["25", "10", "15", "20"],
                 correct: 0,
-                hint: "5² означава 5 × 5 = 25."
+                hint: "Степента означава да умножиш числото само по себе си. 5² = 5 × ?"
             },
             {
                 question: "Колко е √16?",
                 answers: ["2", "8", "4", "6"],
                 correct: 2,
-                hint: "Квадратният корен на 16 е числото, което на квадрат дава 16 — това е 4."
+                hint: "Квадратният корен е обратното на степента. Кое число × себе си = 16?"
             },
             {
                 question: "Колко е -3 + 8?",
                 answers: ["5", "11", "-5", "-11"],
                 correct: 0,
-                hint: "-3 + 8 = 8 - 3 = 5."
+                hint: "Когато събираш отрицателно число с положително, помисли як разстояние от нула."
             },
             {
                 question: "Кое число е просто? ",
                 answers: ["4", "6", "8", "7"],
                 correct: 3,
-                hint: "Простото число има точно два делителя: 1 и себе си. 7 е такова."
+                hint: "Простото число се дели само на 1 и на себе си. Кое от тези числа има точно два делителя?"
             },
             {
                 question: "Колко е 3/4 от 100?",
                 answers: ["75", "70", "80", "85"],
                 correct: 0,
-                hint: "3/4 от 100 = 100 × 0.75 = 75."
+                hint: "3/4 означава три части от четири. Какво е 1/4 от 100? После умножи по 3."
             },
             {
                 question: "Колко е 1.5 + 2.7?",
                 answers: ["4.2", "3.8", "4.0", "4.4"],
                 correct: 0,
-                hint: "Съберете: 1.5 + 2.7 = 4.2."
+                hint: "Събирай десетичните числа както и целите. Помисли колко е 1 + 2, после добави 0.5 + 0.7."
             },
             {
                 question: "Колко страни има триъгълникът?",
                 answers: ["4", "3", "5", "6"],
                 correct: 1,
-                hint: "Триъгълникът има 3 страни — името подсказва."
+                hint: "Помисли за формата на триъгълник. Колко прави линии го образуват?"
             }
         ];
 
@@ -195,11 +195,35 @@
             startTimer();
         }
 
-        function showHint() {
+        async function showHint() {
             const hintBox = document.getElementById('hintBox');
+            const hintBtn = document.getElementById('hintBtn');
             const question = questions[currentQuestionIndex];
-            hintBox.textContent = question.hint || 'Няма наличен хинт.';
+
+            // Show loading state
+            hintBox.textContent = 'Генериране на хинт...';
             hintBox.hidden = false;
+            hintBtn.disabled = true;
+
+            try {
+                const response = await fetch('http://localhost:3000/api/hint', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ question: question.question }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch hint');
+                }
+
+                const data = await response.json();
+                hintBox.textContent = data.hint || 'Няма наличен хинт.';
+            } catch (error) {
+                console.error('Error fetching hint:', error);
+                hintBox.textContent = question.hint || 'Не успя да се заредят подсказките. Опитайте пак.';
+            } finally {
+                hintBtn.disabled = false;
+            }
         }
 
         function calculateGrade(score, total) {

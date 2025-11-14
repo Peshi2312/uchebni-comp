@@ -5,7 +5,7 @@
     flex-direction: column;
     align-items: center;
     /* patterned background behind the cards (kept behind, cards remain semi-opaque) */
-    background-image: url("Background_Game.png");
+    background-image: url("../Background_Game.png");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

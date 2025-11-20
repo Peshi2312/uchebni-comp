@@ -78,3 +78,12 @@ app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
   console.log('✅ Make sure OPENAI_API_KEY is set in .env file');
 });
+app.get('/', (req, res) => {
+  res.json({ 
+    message: 'SoftQuiz API Server',
+    endpoints: {
+      health: '/health',
+      hint: 'POST /api/hint'
+    }
+  });
+});
